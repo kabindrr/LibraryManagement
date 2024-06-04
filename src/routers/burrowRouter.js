@@ -12,7 +12,11 @@ import {
   insertBook,
   updateABookById,
 } from "../models/books/BookModal.js";
-import { insertBurrow } from "../models/burrowHistory/BurrowModal.js";
+import {
+  getAllBurrows,
+  insertBurrow,
+  updateABurrowById,
+} from "../models/burrowHistory/BurrowModal.js";
 const router = express.Router();
 
 const maxBurrowingDays = 15;
@@ -22,10 +26,17 @@ router.post("/", newBurrowValidation, async (req, res, next) => {
   try {
     const today = new Date();
     const { _id, fName } = req.userInfo;
+
+    const expectedAvailable = today.setDate(
+      today.getDate() + maxBurrowingDays,
+      "day"
+    );
+
     const burrow = await insertBurrow({
       ...req.body,
       userId: _id,
       userName: fName,
+      dueDate: expectedAvailable,
     });
     //if burrow successfull
     //then -> update the book table, isAvailable: false
@@ -33,11 +44,7 @@ router.post("/", newBurrowValidation, async (req, res, next) => {
     if (burrow) {
       await updateABookById(req.body.bookId, {
         isAvailable: false,
-
-        expectedAvailable: today.setDate(
-          today.getDate() + maxBurrowingDays,
-          "day"
-        ),
+        expectedAvailable,
       });
 
       return res.json({
@@ -50,6 +57,44 @@ router.post("/", newBurrowValidation, async (req, res, next) => {
       status: "error",
       message: "Unable to burrow the book, try agian later",
     });
+  } catch (error) {
+    next(error);
+  }
+});
+router.get("/", async (req, res, next) => {
+  try {
+    const { _id, role } = req.userInfo;
+    const burrows = (await getAllBurrows({ userId: _id })) || [];
+
+    res.json({
+      status: "success",
+      message: "",
+      burrows,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/", async (req, res, next) => {
+  try {
+    if (!req.body._id || !req.body.bookId) {
+      throw new Error("Invalid Data");
+    }
+    //update burrow table
+    const burrow = await updateABurrowById(req.body._id, {
+      isReturned: true,
+      returnedDate: Date(),
+    });
+
+    ///update book table
+    const book = await updateABookById(req.body.bookId, {
+      isAvailable: true,
+      expectedAvailable: null,
+    });
+
+    res.json({});
+    const burrowId = req.body._id;
   } catch (error) {
     next(error);
   }

@@ -4,6 +4,8 @@ const STR = Joi.string();
 const STR_REQUIRED = Joi.string().required();
 const PHONE = Joi.string().allow("", null);
 const EMAIL = Joi.string().email({ minDomainSegments: 2 });
+const ISTRUE = Joi.boolean().allow(null);
+const NUM_REQ = Joi.number();
 
 const joiValidator = ({ req, res, next, schema }) => {
   try {
@@ -51,6 +53,8 @@ export const updateBookValidation = (req, res, next) => {
     thumbnail: STR_REQUIRED,
     publishedYear: Joi.number(),
     description: STR_REQUIRED,
+    isAvailable: ISTRUE,
+    expectedAvailable: Joi.date().allow(null, ""),
   });
   return joiValidator({ req, res, next, schema });
 };
@@ -58,6 +62,14 @@ export const updateBookValidation = (req, res, next) => {
 // ============= Burrow validation
 
 export const newBurrowValidation = (req, res, next) => {
+  const schema = Joi.object({
+    bookId: STR_REQUIRED,
+    bookTitle: STR_REQUIRED,
+    thumbnail: STR_REQUIRED,
+  });
+  return joiValidator({ req, res, next, schema });
+};
+export const reviewValidation = (req, res, next) => {
   const schema = Joi.object({
     bookId: STR_REQUIRED,
     bookTitle: STR_REQUIRED,
