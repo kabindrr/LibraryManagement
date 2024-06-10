@@ -6,33 +6,36 @@ const reviewSchema = new mongoose.Schema(
       type: String,
       default: "inactive",
     },
+    bookId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     burrowId: {
       type: mongoose.Types.ObjectId,
       required: true,
     },
-    author: {
+    userId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+    userName: {
       type: String,
       required: true,
     },
-
-    message: {
+    tilte: {
       type: String,
       required: true,
     },
     ratings: {
       type: Number,
       min: 1,
-      required: true,
       max: 5,
+      required: true,
     },
 
-    isAvailable: {
-      type: Boolean,
-      default: true,
-    },
-    expectedAvailable: {
-      type: Date,
-      default: null,
+    message: {
+      type: String,
+      required: true,
     },
   },
   {

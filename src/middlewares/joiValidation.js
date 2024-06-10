@@ -69,11 +69,19 @@ export const newBurrowValidation = (req, res, next) => {
   });
   return joiValidator({ req, res, next, schema });
 };
-export const reviewValidation = (req, res, next) => {
+
+// ============= Review validation
+
+export const newReviewValidation = (req, res, next) => {
   const schema = Joi.object({
     bookId: STR_REQUIRED,
     bookTitle: STR_REQUIRED,
-    thumbnail: STR_REQUIRED,
+    burrowId: STR_REQUIRED,
+    message: STR_REQUIRED,
+    ratings: NUM_REQ,
+    tilte: STR_REQUIRED,
+    userId: STR_REQUIRED,
+    userName: STR_REQUIRED,
   });
   return joiValidator({ req, res, next, schema });
 };

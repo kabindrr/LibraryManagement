@@ -64,7 +64,8 @@ router.post("/", newBurrowValidation, async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const { _id, role } = req.userInfo;
-    const burrows = (await getAllBurrows({ userId: _id })) || [];
+    const filter = role === "admin" ? null : { userId: _id };
+    const burrows = (await getAllBurrows(filter)) || [];
 
     res.json({
       status: "success",
@@ -79,22 +80,31 @@ router.get("/", async (req, res, next) => {
 router.put("/", async (req, res, next) => {
   try {
     if (!req.body._id || !req.body.bookId) {
-      throw new Error("Invalid Data");
+      throw new Error("Invalid data");
     }
-    //update burrow table
+    // update burrow table
     const burrow = await updateABurrowById(req.body._id, {
       isReturned: true,
       returnedDate: Date(),
     });
 
-    ///update book table
+    // update book table
     const book = await updateABookById(req.body.bookId, {
       isAvailable: true,
       expectedAvailable: null,
     });
 
-    res.json({});
-    const burrowId = req.body._id;
+    if (burrow?._id && book?._id) {
+      return res.json({
+        status: "success",
+        message: "Your have successfull returned the book",
+      });
+    }
+
+    res.json({
+      status: "error",
+      message: "Unable to process your request, pelase contact Admin asap",
+    });
   } catch (error) {
     next(error);
   }
