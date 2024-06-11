@@ -2,6 +2,13 @@ import { findToken } from "../models/session/SessionSchema.js";
 import { getUserByEmail } from "../models/user/UserModel.js";
 import { verifyAccessJWT, verifyRefreshJWT } from "../utils/jwt.js";
 
+
+
+
+
+
+
+
 export const auth = async (req, res, next) => {
   try {
     //     1. receive jwt via authorization header

@@ -2,6 +2,7 @@
 @apiEP = {{rootURL}}/api/v1
 @userAPI = {{apiEP}}/users
 @bookAPI = {{apiEP}}/books
+@reviewAPI = {{apiEP}}/reviews
 
 
 
@@ -35,3 +36,9 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJp
 
 ### Get all public books for the user 
 GET {{bookAPI}}/
+
+
+
+###===== REviews api
+### Get review  
+GET {{reviewAPI}}

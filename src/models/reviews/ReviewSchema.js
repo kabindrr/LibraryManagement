@@ -10,6 +10,10 @@ const reviewSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
     },
+    thumbnail: {
+      type: String,
+      default: "",
+    },
     burrowId: {
       type: mongoose.Types.ObjectId,
       required: true,

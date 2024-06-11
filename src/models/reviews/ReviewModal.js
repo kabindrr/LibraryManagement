@@ -16,9 +16,9 @@ export const getAllReviews = (filter) => {
 // };
 
 // update review by id
-// export const updateAReviewById = (_id, obj) => {
-//   return ReviewSchema.findByIdAndUpdate(_id, obj);
-// };
+export const updateAReviewById = (_id, obj) => {
+  return ReviewSchema.findByIdAndUpdate(_id, obj);
+};
 
 //delete review by id
 // export const deleteAReviewById = (_id) => {
